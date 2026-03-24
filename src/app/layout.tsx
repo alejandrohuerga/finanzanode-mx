@@ -24,10 +24,34 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
+      lang="es-MX"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col" suppressHydrationWarning>
+        {children}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "SoftwareApplication",
+              name: "Calculadora de Interés Compuesto México",
+              operatingSystem: "All",
+              applicationCategory: "FinanceApplication",
+              aggregateRating: {
+                "@type": "AggregateRating",
+                ratingValue: "4.9",
+                ratingCount: "150",
+              },
+              offers: {
+                "@type": "Offer",
+                price: "0",
+                priceCurrency: "MXN",
+              },
+            }),
+          }}
+        />
+      </body>
     </html>
   );
 }

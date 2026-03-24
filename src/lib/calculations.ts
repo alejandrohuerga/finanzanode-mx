@@ -1,3 +1,5 @@
+// src/lib/calculations.ts
+
 export interface CalculationResult {
   year: number;
   balance: number;
