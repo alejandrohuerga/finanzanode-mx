@@ -7,8 +7,12 @@ interface ChartProps {
 
 export default function InvestmentChart({ data }: ChartProps) {
   // Formateador para pesos mexicanos
-  const formatter = (value: number) => 
-    new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(value);
+  const currencyFormatter = (value: number) => 
+    new Intl.NumberFormat('es-MX', { 
+      style: 'currency', 
+      currency: 'MXN', 
+      maximumFractionDigits: 0 
+    }).format(value);
 
   return (
     <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100 mt-8">
@@ -23,9 +27,14 @@ export default function InvestmentChart({ data }: ChartProps) {
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
-            <XAxis dataKey="year" label={{ value: 'Años', position: 'insideBottom', offset: -5 }} />
-            <YAxis tickFormatter={(value) => `$${value/1000}k`} />
-            <Tooltip formatter={(value: number) => formatter(value)} labelFormatter={(label) => `Año ${label}`} />
+            <XAxis dataKey="year" />
+            <YAxis tickFormatter={(value) => `$${Number(value)/1000}k`} />
+            
+            <Tooltip 
+              formatter={(value: any) => currencyFormatter(Number(value))} 
+              labelFormatter={(label) => `Año ${label}`} 
+            />
+            
             <Area 
               type="monotone" 
               dataKey="balance" 
