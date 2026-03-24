@@ -4,6 +4,7 @@ import { calculateCompoundInterest, type CalculationResult } from '@/lib/calcula
 import CalculatorForm from '@/components/CalculatorForm';
 import InvestmentChart from '@/components/InvestmentChart';
 import SEOContent from '@/components/SEOContent';
+import ResultsTable from '@/components/ResultsTable';
 
 export default function Home() {
   const [results, setResults] = useState<CalculationResult[]>([]);
@@ -46,7 +47,7 @@ export default function Home() {
             
             {/* 1. Visualización Gráfica */}
             <InvestmentChart data={results} />
-
+            <ResultsTable data={results} />
             {/* 2. Cuadro de Resumen Financiero */}
             <div className="p-6 bg-blue-50 rounded-xl border border-blue-100 shadow-sm">
               <h2 className="text-2xl font-bold text-blue-900">
