@@ -36,7 +36,7 @@ export default function CalculatorForm({ onCalculate }: CalculatorFormProps) {
             type="number" 
             value={formData.initialAmount}
             onChange={(e) => setFormData({...formData, initialAmount: Number(e.target.value)})}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
+            className="mt-1 block w-full rounded-md border-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
           />
         </div>
         <div>
@@ -45,7 +45,7 @@ export default function CalculatorForm({ onCalculate }: CalculatorFormProps) {
             type="number" 
             value={formData.monthlyContribution}
             onChange={(e) => setFormData({...formData, monthlyContribution: Number(e.target.value)})}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
+            className="mt-1 block w-full rounded-md border-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
           />
         </div>
         <div>
@@ -55,7 +55,7 @@ export default function CalculatorForm({ onCalculate }: CalculatorFormProps) {
             step="0.1"
             value={formData.annualRate}
             onChange={(e) => setFormData({...formData, annualRate: Number(e.target.value)})}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
+            className="mt-1 block w-full rounded-md border-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
           />
         </div>
         <div>
@@ -64,7 +64,7 @@ export default function CalculatorForm({ onCalculate }: CalculatorFormProps) {
             type="number" 
             value={formData.years}
             onChange={(e) => setFormData({...formData, years: Number(e.target.value)})}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
+            className="mt-1 block w-full rounded-md border-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2 border"
           />
         </div>
       </div>
