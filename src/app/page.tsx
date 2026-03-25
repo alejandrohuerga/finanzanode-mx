@@ -100,7 +100,7 @@ export default function Home() {
             <div className="mt-6 flex justify-center space-x-6 text-sm">
               <a href="/privacidad" className="text-blue-600 hover:underline">Privacidad</a>
               <a href="/guia" className="text-blue-600 hover:underline">Guía de Inversión</a>
-              <a href="finanzasmxinterescompuesto@gmail.com" className="text-blue-600 hover:underline">Contacto</a>
+              <a href="/contacto" className="text-blue-600 hover:underline">Contacto</a>
             </div>
             <p className="mt-8 text-xs text-gray-300">
               © 2026 MxCalc. Los cálculos son estimaciones y no constituyen asesoría financiera legal.
