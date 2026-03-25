@@ -91,14 +91,20 @@ export default function Home() {
         <SEOContent />
 
         {/* FOOTER: Credibilidad */}
-        <footer className="mt-20 py-8 border-t border-gray-200 text-center text-gray-400 text-sm">
-          <p>© 2026 MxCalc - Herramientas Financieras para México</p>
-          <p className="mt-2 text-xs">
-            Los resultados son proyecciones informativas basadas en los datos
-            ingresados.
-          </p>
-          <div className="mt-2 space-x-4">
-            <a href="/privacidad" className="hover:text-blue-600 transition-colors"> Aviso de Privacidad </a>
+        <footer className="mt-20 py-10 border-t border-gray-200 bg-white">
+          <div className="max-w-4xl mx-auto px-4 text-center">
+            <p className="text-gray-600 font-bold">MxCalc - Herramientas Financieras México</p>
+            <p className="text-gray-400 text-sm mt-2">
+              Ayudamos a los inversionistas mexicanos a proyectar su futuro financiero con datos reales.
+            </p>
+            <div className="mt-6 flex justify-center space-x-6 text-sm">
+              <a href="/privacidad" className="text-blue-600 hover:underline">Privacidad</a>
+              <a href="/guia" className="text-blue-600 hover:underline">Guía de Inversión</a>
+              <a href="finanzasmxinterescompuesto@gmail.com" className="text-blue-600 hover:underline">Contacto</a>
+            </div>
+            <p className="mt-8 text-xs text-gray-300">
+              © 2026 MxCalc. Los cálculos son estimaciones y no constituyen asesoría financiera legal.
+            </p>
           </div>
         </footer>
       </div>
