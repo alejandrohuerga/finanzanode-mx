@@ -17,7 +17,8 @@ export default function PrivacyPage() {
 
         <section className="mb-8">
           <h2 className="text-xl font-semibold mb-3">3. Cookies y Publicidad</h2>
-          <p>Utilizamos servicios de terceros como Google Analytics y Google AdSense que pueden utilizar cookies para mejorar la experiencia del usuario y mostrar publicidad relevante basada en sus visitas anteriores.</p>
+          <p>Utilizamos <strong>Google Analytics</strong> para analizar el tráfico y <strong>Google AdSense</strong> para mostrar anuncios. Estos servicios utilizan cookies para personalizar anuncios basados en sus visitas previas. Google utiliza la cookie de <strong>DoubleClick</strong> para permitir que tanto él como sus socios muestren anuncios basados en las visitas de los usuarios a este u otros sitios de Internet.</p>
+          <p className="mt-2 text-sm text-gray-500">Usted puede inhabilitar el uso de la publicidad personalizada visitando <a href="https://www.google.com/settings/ads" target="_blank" className="underline">Configuración de anuncios de Google</a>.</p>
         </section>
 
         <section className="mb-8">
