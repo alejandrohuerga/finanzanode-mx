@@ -5,6 +5,7 @@ import CalculatorForm from '@/components/CalculatorForm';
 import InvestmentChart from '@/components/InvestmentChart';
 import SEOContent from '@/components/SEOContent';
 import ResultsTable from '@/components/ResultsTable';
+import Testimonials from '@/components/Testimonials';
 
 export default function Home() {
   const [results, setResults] = useState<CalculationResult[]>([]);
@@ -87,7 +88,8 @@ export default function Home() {
             </div>
           </div>
         )}
-
+        
+        <Testimonials/>
         {/* CONTENIDO SEMÁNTICO: Fundamental para que Google nos posicione (SEO) */}
         <SEOContent />
 
