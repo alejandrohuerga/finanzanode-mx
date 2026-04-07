@@ -20,6 +20,14 @@ export const metadata: Metadata = {
   verification: {
     google: "CBx9YvN3ysRUsP3u4-w-CLIXeO1Gh8nqUdgxqxWNZg4",
   },
+  openGraph: {
+    title: 'Calculadora de Interés Compuesto México',
+    description: 'Proyecta tu futuro financiero con datos reales de México.',
+    url: 'https://finanzanode-mx.vercel.app',
+    siteName: 'MxCalc',
+    locale: 'es_MX',
+    type: 'website',
+  },
 };
 
 export default function RootLayout({
