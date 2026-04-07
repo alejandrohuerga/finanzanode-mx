@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   title: "Calculadora de Interés Compuesto México",
   description: "Calcula interés compuesto fácilmente para México",
   verification: {
-    google: "nWqpGWjsrYjoOscU-CDjdPSphIPkETgmjOWfIhsZfxU",
+    google: "CBx9YvN3ysRUsP3u4-w-CLIXeO1Gh8nqUdgxqxWNZg4",
   },
 };
 
