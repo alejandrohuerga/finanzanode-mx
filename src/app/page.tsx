@@ -22,7 +22,7 @@ export default function Home() {
       data.years
     );
     setResults(res);
-    window.scrollTo({ top: 600, behavior: 'smooth' });
+    window.scrollTo({ top: 400, behavior: 'smooth' });
   };
 
   return (
