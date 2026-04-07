@@ -36,7 +36,7 @@ export default function RootLayout({
         <Navbar/>
         {children}
         <Analytics/>
-        <GoogleAnalytics gaId="G-S6KGW31QDB"/>
+        <GoogleAnalytics gaId="G-DSWFC2C4DY"/>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
