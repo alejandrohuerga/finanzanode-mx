@@ -20,9 +20,32 @@ export default function GuiaPage() {
           </p>
         </header>
 
+        <nav className="mb-12 p-6 bg-gray-50 rounded-xl border border-gray-200">
+          <p className="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">
+            En esta guía aprenderás:
+          </p>
+          <ul className="space-y-3">
+            <li>
+              <a href="#que-es" className="text-blue-600 hover:underline font-medium">
+                1. ¿Qué es el Interés Compuesto? y su fórmula mágica.
+              </a>
+            </li>
+            <li>
+              <a href="#factor-isr" className="text-blue-600 hover:underline font-medium">
+                2. El impacto del ISR en tus rendimientos reales.
+              </a>
+            </li>
+            <li>
+              <a href="#donde-invertir" className="text-blue-600 hover:underline font-medium">
+                3. Opciones de inversión en México para 2026.
+              </a>
+            </li>
+          </ul>
+        </nav>
+
         <article className="prose prose-blue max-w-none text-gray-800 space-y-8">
           
-          <section>
+          <section id="que-es">
             <h2 className="text-2xl font-bold text-gray-900">1. ¿Qué es el Interés Compuesto?</h2>
             <p>
               Albert Einstein lo llamó la "octava maravilla del mundo". El interés compuesto es el proceso donde los intereses que generas se suman al capital original, y en el siguiente periodo, esos nuevos intereses generan más intereses por sí mismos.
@@ -34,7 +57,7 @@ export default function GuiaPage() {
             </div>
           </section>
 
-          <section>
+          <section id='factor-isr'>
             <h2 className="text-2xl font-bold text-gray-900">2. El factor ISR en México</h2>
             <p>
               A diferencia de otras calculadoras internacionales, en <strong>MxCalc</strong> consideramos la retención del Impuesto Sobre la Renta (ISR). En México, las instituciones financieras están obligadas a retener un porcentaje sobre el capital invertido (tasa que varía anualmente según la Ley de Ingresos de la Federación).
@@ -44,7 +67,7 @@ export default function GuiaPage() {
             </p>
           </section>
 
-          <section>
+          <section id='donde-invertir'>
             <h2 className="text-2xl font-bold text-gray-900">3. ¿Dónde aplicar el Interés Compuesto en 2026?</h2>
             <p>Actualmente, el mercado mexicano ofrece opciones sólidas para poner a prueba nuestra calculadora:</p>
             <ul className="list-disc pl-6 space-y-2">
