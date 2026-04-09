@@ -18,8 +18,7 @@ export const metadata: Metadata = {
   title: "Calculadora de Interés Compuesto México",
   description: "Calcula interés compuesto fácilmente para México",
   
-  // 1. EL PUENTE: Esta es la línea que te faltaba
-  manifest: '/site.webmanifest', 
+   
 
   icons: {
     icon: '/favicon.ico',
@@ -37,6 +36,9 @@ export const metadata: Metadata = {
       },
     ],
   },
+  // 1. EL PUENTE: Esta es la línea que te faltaba
+  manifest: '/site.webmanifest',
+  
   verification: {
     google: "CBx9YvN3ysRUsP3u4-w-CLIXeO1Gh8nqUdgxqxWNZg4",
   },
