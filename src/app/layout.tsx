@@ -17,6 +17,23 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Calculadora de Interés Compuesto México",
   description: "Calcula interés compuesto fácilmente para México",
+  icons:{
+    icon:'/favicon.ico',
+    apple:'/apple-touch-icon.png',
+    other: [
+      {
+        rel: "icon",
+        url: "/android-chrome-192x192.png",
+        sizes: "192x192",
+      },
+      {
+        rel: "icon",
+        url: "/android-chrome-512x512.png",
+        sizes: "512x512",
+      },
+    ],
+
+  },
   verification: {
     google: "CBx9YvN3ysRUsP3u4-w-CLIXeO1Gh8nqUdgxqxWNZg4",
   },
