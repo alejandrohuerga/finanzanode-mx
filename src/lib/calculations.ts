@@ -4,16 +4,16 @@ export interface CalculationResult {
   contributions: number;
   interests: number;
   taxPaid: number;
-  realBalance: number; // <--- Añadido para el poder adquisitivo real
+  realBalance: number; // El valor real ajustado a inflación
 }
 
 export const calculateCompoundInterest = (
   initialAmount: number,
   monthlyContribution: number,
-  annualRate: number, // Ejemplo: 0.11 para 11%
+  annualRate: number,
   years: number,
-  inflationRate: number = 0.045, // Nueva: Tasa de inflación anual
-  taxRate: number = 0.005 // ISR estimado sobre capital
+  inflationRate: number = 0.045, // Nuevo parámetro
+  taxRate: number = 0.005
 ): CalculationResult[] => {
   let results: CalculationResult[] = [];
   let currentBalance = initialAmount;
@@ -23,10 +23,7 @@ export const calculateCompoundInterest = (
 
   for (let year = 1; year <= years; year++) {
     for (let month = 1; month <= 12; month++) {
-      // Cálculo de interés mensual
       const monthlyInterest = currentBalance * (annualRate / 12);
-      
-      // Simulación de retención de ISR mensual
       const monthlyTax = currentBalance * (taxRate / 12);
       
       currentBalance += monthlyInterest + monthlyContribution - monthlyTax;
@@ -35,8 +32,7 @@ export const calculateCompoundInterest = (
       totalTax += monthlyTax;
     }
 
-    // --- CÁLCULO DEL PODER ADQUISITIVO REAL ---
-    // Dividimos el saldo actual entre (1 + inflación) elevado al año correspondiente
+    // Calculamos cuánto valdría ese dinero hoy (Poder adquisitivo)
     const realBalance = currentBalance / Math.pow(1 + inflationRate, year);
 
     results.push({
@@ -45,9 +41,8 @@ export const calculateCompoundInterest = (
       contributions: Math.round(totalContributions),
       interests: Math.round(totalInterests),
       taxPaid: Math.round(totalTax),
-      realBalance: Math.round(realBalance), // <--- Lo que verá la línea naranja
+      realBalance: Math.round(realBalance),
     });
   }
-
   return results;
 };
