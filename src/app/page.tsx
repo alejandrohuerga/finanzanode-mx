@@ -15,14 +15,18 @@ export default function Home() {
     monthlyContribution: number;
     annualRate: number;
     years: number;
+    inflationRate: number; // <--- Ahora recibimos este dato del CalculatorForm
   }) => {
+    // Llamamos a la función de cálculo pasando el nuevo parámetro
     const res = calculateCompoundInterest(
       data.initialAmount,
       data.monthlyContribution,
       data.annualRate,
-      data.years
+      data.years,
+      data.inflationRate // <--- Enviamos la inflación a lib/calculations.ts
     );
     setResults(res);
+    // Scroll suave hacia los resultados para mejorar la UX
     window.scrollTo({ top: 400, behavior: 'smooth' });
   };
 
