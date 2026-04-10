@@ -17,7 +17,9 @@ export default function ResultsTable({ data }: ResultsTableProps) {
     <div className="mt-8 bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
       <div className="p-6 border-b border-gray-50">
         <h3 className="text-lg font-bold text-gray-800">Desglose Anual Proyectado</h3>
-        <p className="text-sm text-gray-500">Evolución de tu patrimonio año tras año.</p>
+        <p className="text-sm text-gray-500">
+          Compara tu saldo nominal frente al poder adquisitivo real (ajustado por inflación).
+        </p>
       </div>
       
       <div className="overflow-x-auto">
@@ -25,7 +27,9 @@ export default function ResultsTable({ data }: ResultsTableProps) {
           <thead>
             <tr className="bg-gray-50 text-gray-600 text-xs uppercase tracking-wider">
               <th className="px-6 py-4 font-semibold">Año</th>
-              <th className="px-6 py-4 font-semibold">Saldo Final</th>
+              <th className="px-6 py-4 font-semibold">Saldo Nominal</th>
+              {/* NUEVA COLUMNA: PODER REAL */}
+              <th className="px-6 py-4 font-semibold text-amber-600 bg-amber-50/30">Poder Real (Inflación)</th>
               <th className="px-6 py-4 font-semibold">Interés Anual</th>
               <th className="px-6 py-4 font-semibold">ISR Estimado</th>
             </tr>
@@ -38,6 +42,10 @@ export default function ResultsTable({ data }: ResultsTableProps) {
                 </td>
                 <td className="px-6 py-4 text-sm font-bold text-blue-700">
                   {formatter(row.balance)}
+                </td>
+                {/* DATO: PODER REAL */}
+                <td className="px-6 py-4 text-sm font-semibold text-amber-700 bg-amber-50/20">
+                  {formatter(row.realBalance)}
                 </td>
                 <td className="px-6 py-4 text-sm text-green-600 font-medium">
                   +{formatter(row.interests)}
