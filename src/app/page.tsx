@@ -1,15 +1,41 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react'; // <--- useEffect añadido
+import { useRouter, useSearchParams } from 'next/navigation'; // <--- Hooks de navegación
 import { calculateCompoundInterest, type CalculationResult } from '@/lib/calculations';
 import CalculatorForm from '@/components/CalculatorForm';
 import InvestmentChart from '@/components/InvestmentChart';
 import SEOContent from '@/components/SEOContent';
 import ResultsTable from '@/components/ResultsTable';
 import Testimonials from '@/components/Testimonials';
-import Link from 'next/link'; // <--- NUEVO: Para el link a la guía PPR
+import Link from 'next/link';
 
 export default function Home() {
   const [results, setResults] = useState<CalculationResult[]>([]);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // 1. Lógica para detectar parámetros en la URL al cargar la página
+  useEffect(() => {
+    const initial = searchParams.get('i');
+    if (initial) {
+      const data = {
+        initialAmount: Number(searchParams.get('i')),
+        monthlyContribution: Number(searchParams.get('m')),
+        annualRate: Number(searchParams.get('r')),
+        years: Number(searchParams.get('y')),
+        inflationRate: Number(searchParams.get('inf')) || 4.5,
+      };
+      // Ejecutamos el cálculo automáticamente con los datos de la URL
+      const res = calculateCompoundInterest(
+        data.initialAmount,
+        data.monthlyContribution,
+        data.annualRate,
+        data.years,
+        data.inflationRate
+      );
+      setResults(res);
+    }
+  }, [searchParams]);
 
   const handleCalculate = (data: {
     initialAmount: number;
@@ -18,6 +44,16 @@ export default function Home() {
     years: number;
     inflationRate: number;
   }) => {
+    // 2. Actualizamos la URL con los parámetros para que sea compartible
+    const params = new URLSearchParams();
+    params.set('i', data.initialAmount.toString());
+    params.set('m', data.monthlyContribution.toString());
+    params.set('r', data.annualRate.toString());
+    params.set('y', data.years.toString());
+    params.set('inf', data.inflationRate.toString());
+    
+    router.push(`?${params.toString()}`, { scroll: false });
+
     const res = calculateCompoundInterest(
       data.initialAmount,
       data.monthlyContribution,
@@ -47,6 +83,29 @@ export default function Home() {
         {results.length > 0 && (
           <div className="mt-8 space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
             <InvestmentChart data={results} />
+            
+            {/* BOTONES DE COMPARTIR (NUEVO) */}
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(window.location.href);
+                  alert("¡Enlace de tu proyección copiado! 🚀");
+                }}
+                className="flex-1 bg-white border-2 border-blue-600 text-blue-600 px-4 py-3 rounded-xl font-bold hover:bg-blue-50 transition-all flex items-center justify-center gap-2"
+              >
+                🔗 Copiar Enlace
+              </button>
+              
+              <a
+                href={`https://wa.me/?text=${encodeURIComponent(`¡Mira la proyección que hice en MxCalc! Mi patrimonio estimado es de $${results[results.length - 1].balance.toLocaleString("es-MX")} MXN. Chécalo aquí: ` + window.location.href)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 bg-[#25D366] text-white px-4 py-3 rounded-xl font-bold hover:opacity-90 transition-all flex items-center justify-center gap-2"
+              >
+                WhatsApp
+              </a>
+            </div>
+
             <ResultsTable data={results} />
             
             <div className="p-6 bg-blue-50 rounded-xl border border-blue-100 shadow-sm">
@@ -56,7 +115,6 @@ export default function Home() {
                 MXN
               </h2>
               
-              {/* NUEVO: Mostrar el Poder Adquisitivo en el resumen */}
               <p className="text-amber-700 font-bold text-lg mt-1">
                 Poder adquisitivo real: $
                 {results[results.length - 1].realBalance.toLocaleString("es-MX")}{" "}
@@ -89,7 +147,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* NUEVO: Banner del PPR sugerido por el usuario de Reddit */}
             <div className="mt-10 p-6 border-2 border-dashed border-blue-200 rounded-2xl bg-blue-50/50">
               <h4 className="text-blue-900 font-bold mb-2">💡 ¿Buscas optimizar tu retiro?</h4>
               <p className="text-blue-800 text-sm mb-4">
