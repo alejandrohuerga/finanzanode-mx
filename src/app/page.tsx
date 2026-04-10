@@ -13,7 +13,7 @@ export default function Home() {
   const [results, setResults] = useState<CalculationResult[]>([]);
   const router = useRouter();
   const searchParams = useSearchParams();
-
+  // Esto es un comentario de prueba
   // 1. Lógica para detectar parámetros en la URL al cargar la página
   useEffect(() => {
     const initial = searchParams.get('i');
