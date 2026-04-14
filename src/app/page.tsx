@@ -9,6 +9,7 @@ import ResultsTable from '@/components/ResultsTable';
 import Testimonials from '@/components/Testimonials';
 import Link from 'next/link';
 import FAQSection from '@/components/FAQSection';
+import Footer from '@/components/Footer';
 
 // 1. Creamos un componente interno que maneja la lógica de la URL
 function CalculatorContent() {
@@ -155,26 +156,7 @@ export default function Home() {
         <Testimonials />
         <SEOContent />
         <FAQSection />
-        <footer className="mt-20 py-10 border-t border-gray-200 bg-white text-center">
-          <p>© 2026 MxCalc - Herramientas Financieras para México</p>
-          <p className="mt-2 text-xs">
-            Los resultados son proyecciones informativas basadas en los datos
-            ingresados.
-          </p>
-          <p className="mt-2 text-xs">
-            Los resultados son proyecciones informativas basadas en los datos
-            ingresados.
-          </p>
-          <div className="mt-2 space-x-4">
-            <a
-              href="/privacidad"
-              className="hover:text-blue-600 transition-colors"
-            >
-              {" "}
-              Aviso de Privacidad{" "}
-            </a>
-          </div>
-        </footer>
+        <Footer/>
       </div>
     </main>
   );
