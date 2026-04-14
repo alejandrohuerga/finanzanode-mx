@@ -8,6 +8,7 @@ import SEOContent from '@/components/SEOContent';
 import ResultsTable from '@/components/ResultsTable';
 import Testimonials from '@/components/Testimonials';
 import Link from 'next/link';
+import FAQSection from '@/components/FAQSection';
 
 // 1. Creamos un componente interno que maneja la lógica de la URL
 function CalculatorContent() {
@@ -146,7 +147,7 @@ export default function Home() {
         
         <Testimonials/>
         <SEOContent />
-
+        <FAQSection/>
         <footer className="mt-20 py-10 border-t border-gray-200 bg-white text-center">
            {/* Tu footer normal aquí */}
         </footer>
