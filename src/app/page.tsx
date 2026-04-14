@@ -136,20 +136,44 @@ export default function Home() {
             Calculadora de Interés Compuesto México
           </h1>
           <p className="text-gray-600 text-lg">
-            Proyecta tu ahorro e inversión considerando el ISR estimado y rendimientos reales.
+            Proyecta tu ahorro e inversión considerando el ISR estimado y
+            rendimientos reales.
           </p>
         </header>
 
         {/* EL TRUCO: Suspense envuelve la parte que usa useSearchParams */}
-        <Suspense fallback={<div className="text-center py-10 text-gray-500 text-sm italic">Cargando calculadora...</div>}>
+        <Suspense
+          fallback={
+            <div className="text-center py-10 text-gray-500 text-sm italic">
+              Cargando calculadora...
+            </div>
+          }
+        >
           <CalculatorContent />
         </Suspense>
-        
-        <Testimonials/>
+
+        <Testimonials />
         <SEOContent />
-        <FAQSection/>
+        <FAQSection />
         <footer className="mt-20 py-10 border-t border-gray-200 bg-white text-center">
-           {/* Tu footer normal aquí */}
+          <p>© 2026 MxCalc - Herramientas Financieras para México</p>
+          <p className="mt-2 text-xs">
+            Los resultados son proyecciones informativas basadas en los datos
+            ingresados.
+          </p>
+          <p className="mt-2 text-xs">
+            Los resultados son proyecciones informativas basadas en los datos
+            ingresados.
+          </p>
+          <div className="mt-2 space-x-4">
+            <a
+              href="/privacidad"
+              className="hover:text-blue-600 transition-colors"
+            >
+              {" "}
+              Aviso de Privacidad{" "}
+            </a>
+          </div>
         </footer>
       </div>
     </main>
