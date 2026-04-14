@@ -161,10 +161,6 @@ export default function Home() {
             Los resultados son proyecciones informativas basadas en los datos
             ingresados.
           </p>
-          <p className="mt-2 text-xs">
-            Los resultados son proyecciones informativas basadas en los datos
-            ingresados.
-          </p>
           <div className="mt-2 space-x-4">
             <a
               href="/privacidad"
