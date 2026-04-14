@@ -36,7 +36,6 @@ export default function Footer() {
             <ul className="space-y-2 text-sm">
               <li><Link href="/privacidad" className="text-gray-600 hover:text-blue-600">Aviso de Privacidad</Link></li>
               <li><Link href="/contacto" className="text-gray-600 hover:text-blue-600">Contacto / Sugerencias</Link></li>
-              <li><a href="https://reddit.com" target="_blank" className="text-gray-600 hover:text-blue-600">Comunidad Reddit</a></li>
             </ul>
           </div>
         </div>
