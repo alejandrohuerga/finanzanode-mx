@@ -152,7 +152,37 @@ export default function Home() {
         >
           <CalculatorContent />
         </Suspense>
+        {/* SECCIÓN DE ARTÍCULOS PARA SEO */}
+        <section className="mt-20">
+          <h2 className="text-2xl font-bold text-gray-900 mb-8">Aprende a invertir como un experto</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            {/* Card 1: Cetes vs SOFIPOS */}
+            <Link href="/cetes-vs-sofipos" className="group p-6 bg-white border border-gray-200 rounded-2xl hover:border-blue-500 hover:shadow-md transition-all">
+              <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">Comparativa 2026</span>
+              <h3 className="text-xl font-bold text-gray-900 mt-2 group-hover:text-blue-600 transition-colors">
+                Cetes vs. SOFIPOS: ¿Dónde ganar más?
+              </h3>
+              <p className="text-gray-600 mt-3 text-sm leading-relaxed">
+                Descubre por qué las SOFIPOS pueden darte más dinero neto gracias a sus beneficios fiscales frente a Cetes.
+              </p>
+              <span className="inline-block mt-4 text-blue-600 font-semibold text-sm">Leer comparativa →</span>
+            </Link>
 
+            {/* Card 2: AFORE */}
+            <Link href="/guia-afore" className="group p-6 bg-white border border-gray-200 rounded-2xl hover:border-blue-500 hover:shadow-md transition-all">
+              <span className="text-xs font-bold text-amber-600 uppercase tracking-widest">Retiro Seguro</span>
+              <h3 className="text-xl font-bold text-gray-900 mt-2 group-hover:text-blue-600 transition-colors">
+                ¿Tu AFORE será suficiente?
+              </h3>
+              <p className="text-gray-600 mt-3 text-sm leading-relaxed">
+                La mayoría de los mexicanos recibirá menos del 50% de su sueldo. Aprende cómo evitar este riesgo.
+              </p>
+              <span className="inline-block mt-4 text-blue-600 font-semibold text-sm">Ver realidad del retiro →</span>
+            </Link>
+
+          </div>
+        </section>    
         <Testimonials />
         <SEOContent />
         <FAQSection />
