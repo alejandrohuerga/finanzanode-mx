@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, Suspense } from 'react'; // <--- Añadimos Suspense
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { calculateCompoundInterest, type CalculationResult } from '@/lib/calculations';
 import CalculatorForm from '@/components/CalculatorForm';
@@ -11,7 +11,7 @@ import Link from 'next/link';
 import FAQSection from '@/components/FAQSection';
 import Footer from '@/components/Footer';
 
-// 1. Creamos un componente interno que maneja la lógica de la URL
+// 1. Componente interno con la lógica de la calculadora
 function CalculatorContent() {
   const [results, setResults] = useState<CalculationResult[]>([]);
   const router = useRouter();
@@ -71,9 +71,19 @@ function CalculatorContent() {
 
       {results.length > 0 && (
         <div className="mt-8 space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+          
+          {/* ENCABEZADO EXCLUSIVO PARA EL PDF (Oculto en web) */}
+          <div className="hidden print:block mb-8 border-b-4 border-blue-600 pb-4 text-left">
+            <h1 className="text-3xl font-bold text-blue-900">MxCalc - Reporte de Proyección</h1>
+            <p className="text-gray-600 text-sm">Análisis detallado de inversión, impuestos e inflación</p>
+            <p className="text-blue-600 font-medium mt-2 text-xs">Generado en: https://finanzanode-mx.vercel.app</p>
+            <p className="text-gray-400 text-xs">Fecha: {new Date().toLocaleDateString("es-MX")}</p>
+          </div>
+
           <InvestmentChart data={results} />
           
-          <div className="flex flex-col sm:flex-row gap-3">
+          {/* BOTONES DE ACCIÓN (Compartir y PDF) */}
+          <div className="flex flex-col sm:flex-row gap-3 no-print">
             <button
               onClick={() => {
                 navigator.clipboard.writeText(window.location.href);
@@ -92,6 +102,13 @@ function CalculatorContent() {
             >
               WhatsApp
             </a>
+
+            <button 
+              onClick={() => window.print()} 
+              className="flex-1 bg-gray-900 text-white px-4 py-3 rounded-xl font-bold hover:bg-black transition-all shadow-lg flex items-center justify-center gap-2"
+            >
+              📄 Descargar PDF
+            </button>
           </div>
 
           <ResultsTable data={results} />
@@ -106,10 +123,9 @@ function CalculatorContent() {
             <p className="text-blue-700 font-medium">
               En {results.length} años habrás construido este patrimonio.
             </p>
-            {/* Aquí iría el resto del desglose (ISR e intereses) que ya tenías */}
           </div>
 
-          <div className="mt-10 p-6 border-2 border-dashed border-blue-200 rounded-2xl bg-blue-50/50">
+          <div className="mt-10 p-6 border-2 border-dashed border-blue-200 rounded-2xl bg-blue-50/50 no-print">
             <h4 className="text-blue-900 font-bold mb-2">💡 ¿Buscas optimizar tu retiro?</h4>
             <p className="text-blue-800 text-sm mb-4">
               Un PPR puede ayudarte a ahorrar miles de pesos en impuestos...
@@ -127,12 +143,12 @@ function CalculatorContent() {
   );
 }
 
-// 2. El componente principal envuelve todo en Suspense
+// 2. Componente principal
 export default function Home() {
   return (
     <main className="min-h-screen bg-gray-50 py-12 px-4">
       <div className="max-w-4xl mx-auto">
-        <header className="mb-10 text-center">
+        <header className="mb-10 text-center no-print">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">
             Calculadora de Interés Compuesto México
           </h1>
@@ -142,7 +158,6 @@ export default function Home() {
           </p>
         </header>
 
-        {/* EL TRUCO: Suspense envuelve la parte que usa useSearchParams */}
         <Suspense
           fallback={
             <div className="text-center py-10 text-gray-500 text-sm italic">
@@ -152,22 +167,23 @@ export default function Home() {
         >
           <CalculatorContent />
         </Suspense>
-        <div className="mt-8 p-6 bg-amber-50 border-2 border-dashed border-amber-200 rounded-2xl text-center">
+
+        {/* FEEDBACK - Oculto en PDF */}
+        <div className="mt-8 p-6 bg-amber-50 border-2 border-dashed border-amber-200 rounded-2xl text-center no-print">
           <h3 className="text-lg font-bold text-amber-900">¿Tienes alguna sugerencia? 💡</h3>
-          <p className="text-amber-800 text-sm mb-4">Me encantaría saber qué otras funciones te ayudarían (ej. exportar a PDF, nuevas tasas).</p>
+          <p className="text-amber-800 text-sm mb-4">Me encantaría saber qué otras funciones te ayudarían.</p>
           <a 
-            href="mailto:tu-correo@ejemplo.com?subject=Feedback MxCalc" 
+            href="mailto:finanzasmxinterescompuesto@gmail.com?subject=Feedback MxCalc" 
             className="inline-block bg-amber-500 text-white px-6 py-2 rounded-full font-bold hover:bg-amber-600 transition-all"
           >
             Enviar sugerencia
           </a>
         </div>
-        {/* SECCIÓN DE ARTÍCULOS PARA SEO */}
-        <section className="mt-20">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8">Aprende a invertir como un experto</h2>
+
+        {/* SECCIÓN DE ARTÍCULOS - Oculto en PDF */}
+        <section className="mt-20 no-print">
+          <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Aprende a invertir como un experto</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            
-            {/* Card 1: Cetes vs SOFIPOS */}
             <Link href="/cetes-vs-sofipos" className="group p-6 bg-white border border-gray-200 rounded-2xl hover:border-blue-500 hover:shadow-md transition-all">
               <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">Comparativa 2026</span>
               <h3 className="text-xl font-bold text-gray-900 mt-2 group-hover:text-blue-600 transition-colors">
@@ -179,7 +195,6 @@ export default function Home() {
               <span className="inline-block mt-4 text-blue-600 font-semibold text-sm">Leer comparativa →</span>
             </Link>
 
-            {/* Card 2: AFORE */}
             <Link href="/guia-afore" className="group p-6 bg-white border border-gray-200 rounded-2xl hover:border-blue-500 hover:shadow-md transition-all">
               <span className="text-xs font-bold text-amber-600 uppercase tracking-widest">Retiro Seguro</span>
               <h3 className="text-xl font-bold text-gray-900 mt-2 group-hover:text-blue-600 transition-colors">
@@ -190,13 +205,15 @@ export default function Home() {
               </p>
               <span className="inline-block mt-4 text-blue-600 font-semibold text-sm">Ver realidad del retiro →</span>
             </Link>
-
           </div>
-        </section>    
-        <Testimonials />
-        <SEOContent />
-        <FAQSection />
-        <Footer/>
+        </section>     
+
+        <div className="no-print">
+            <Testimonials />
+            <SEOContent />
+            <FAQSection />
+            <Footer/>
+        </div>
       </div>
     </main>
   );
