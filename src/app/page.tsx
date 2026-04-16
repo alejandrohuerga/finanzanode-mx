@@ -152,6 +152,16 @@ export default function Home() {
         >
           <CalculatorContent />
         </Suspense>
+        <div className="mt-8 p-6 bg-amber-50 border-2 border-dashed border-amber-200 rounded-2xl text-center">
+          <h3 className="text-lg font-bold text-amber-900">¿Tienes alguna sugerencia? 💡</h3>
+          <p className="text-amber-800 text-sm mb-4">Me encantaría saber qué otras funciones te ayudarían (ej. exportar a PDF, nuevas tasas).</p>
+          <a 
+            href="mailto:tu-correo@ejemplo.com?subject=Feedback MxCalc" 
+            className="inline-block bg-amber-500 text-white px-6 py-2 rounded-full font-bold hover:bg-amber-600 transition-all"
+          >
+            Enviar sugerencia
+          </a>
+        </div>
         {/* SECCIÓN DE ARTÍCULOS PARA SEO */}
         <section className="mt-20">
           <h2 className="text-2xl font-bold text-gray-900 mb-8">Aprende a invertir como un experto</h2>
