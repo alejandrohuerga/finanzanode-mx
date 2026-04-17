@@ -11,6 +11,49 @@ import Link from 'next/link';
 import FAQSection from '@/components/FAQSection';
 import Footer from '@/components/Footer';
 
+// --- NUEVO COMPONENTE DE COMPARATIVA ---
+function ComparisonCards({ initialAmount, monthlyContribution, years }: { initialAmount: number, monthlyContribution: number, years: number }) {
+  const scenarios = [
+    { name: 'Cetes (Aprox)', rate: 11.0, color: 'bg-green-100 text-green-800' },
+    { name: 'SOFIPOs / Nu', rate: 14.5, color: 'bg-purple-100 text-purple-800' },
+    { name: 'S&P 500 (Promedio)', rate: 10.0, color: 'bg-blue-100 text-blue-800' },
+  ];
+
+  const calculateFinal = (rate: number) => {
+    const r = rate / 100 / 12;
+    const n = years * 12;
+    // Fórmula de interés compuesto: P(1+r)^n + PMT[((1+r)^n - 1) / r]
+    const final = initialAmount * Math.pow(1 + r, n) + 
+                  monthlyContribution * ((Math.pow(1 + r, n) - 1) / r);
+    return final;
+  };
+
+  return (
+    <div className="mt-10 no-print">
+      <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+        📊 Comparativa de Escenarios (Rendimiento Bruto)
+      </h3>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {scenarios.map((s) => (
+          <div key={s.name} className="p-5 border border-gray-200 rounded-2xl bg-white shadow-sm hover:shadow-md transition-shadow">
+            <span className={`text-xs font-bold px-2 py-1 rounded-full ${s.color}`}>
+              {s.rate}% Anual
+            </span>
+            <h4 className="font-bold text-gray-800 mt-3">{s.name}</h4>
+            <p className="text-2xl font-black text-gray-900 mt-1">
+              ${calculateFinal(s.rate).toLocaleString('es-MX', { maximumFractionDigits: 0 })}
+            </p>
+            <p className="text-gray-500 text-xs mt-1">Saldo final estimado</p>
+          </div>
+        ))}
+      </div>
+      <p className="text-[10px] text-gray-400 mt-4 italic">
+        *Cálculos informativos basados en capitalización mensual antes de impuestos e inflación.
+      </p>
+    </div>
+  );
+}
+
 // 1. Componente interno con la lógica de la calculadora
 function CalculatorContent() {
   const [results, setResults] = useState<CalculationResult[]>([]);
@@ -72,7 +115,6 @@ function CalculatorContent() {
       {results.length > 0 && (
         <div className="mt-8 space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
           
-          {/* ENCABEZADO EXCLUSIVO PARA EL PDF (Oculto en web) */}
           <div className="hidden print:block mb-8 border-b-4 border-blue-600 pb-4 text-left">
             <h1 className="text-3xl font-bold text-blue-900">MxCalc - Reporte de Proyección</h1>
             <p className="text-gray-600 text-sm">Análisis detallado de inversión, impuestos e inflación</p>
@@ -82,7 +124,6 @@ function CalculatorContent() {
 
           <InvestmentChart data={results} />
           
-          {/* BOTONES DE ACCIÓN (Compartir y PDF) */}
           <div className="flex flex-col sm:flex-row gap-3 no-print">
             <button
               onClick={() => {
@@ -125,6 +166,13 @@ function CalculatorContent() {
             </p>
           </div>
 
+          {/* AQUÍ INSERTAMOS LA COMPARATIVA */}
+          <ComparisonCards 
+            initialAmount={Number(searchParams.get('i')) || 0}
+            monthlyContribution={Number(searchParams.get('m')) || 0}
+            years={Number(searchParams.get('y')) || 1}
+          />
+
           <div className="mt-10 p-6 border-2 border-dashed border-blue-200 rounded-2xl bg-blue-50/50 no-print">
             <h4 className="text-blue-900 font-bold mb-2">💡 ¿Buscas optimizar tu retiro?</h4>
             <p className="text-blue-800 text-sm mb-4">
@@ -143,7 +191,7 @@ function CalculatorContent() {
   );
 }
 
-// 2. Componente principal
+// 2. Componente principal (Home)
 export default function Home() {
   return (
     <main className="min-h-screen bg-gray-50 py-12 px-4">
@@ -168,7 +216,6 @@ export default function Home() {
           <CalculatorContent />
         </Suspense>
 
-        {/* FEEDBACK - Oculto en PDF */}
         <div className="mt-8 p-6 bg-amber-50 border-2 border-dashed border-amber-200 rounded-2xl text-center no-print">
           <h3 className="text-lg font-bold text-amber-900">¿Tienes alguna sugerencia? 💡</h3>
           <p className="text-amber-800 text-sm mb-4">Me encantaría saber qué otras funciones te ayudarían.</p>
@@ -180,7 +227,6 @@ export default function Home() {
           </a>
         </div>
 
-        {/* SECCIÓN DE ARTÍCULOS - Oculto en PDF */}
         <section className="mt-20 no-print">
           <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Aprende a invertir como un experto</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
