@@ -24,3 +24,62 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* Aseguramos que los fondos no desaparezcan */
+  .bg-blue-50 {
+    background-color: #eff6ff !important;
+  }
+  .bg-amber-50 {
+    background-color: #fffbeb !important;
+  }
+  .border-blue-600 {
+    border-color: #2563eb !important;
+  }
+
+  /* Ocultar lo innecesario */
+  .no-print {
+    display: none !important;
+  }
+
+  /* Ajuste para que la gráfica no salga gris */
+  canvas {
+    max-width: 100% !important;
+    height: auto !important;
+  }
+  
+  /* Ocultar elementos innecesarios */
+  .no-print, 
+  nav, 
+  footer, 
+  button,
+  .ads-placeholder {
+    display: none !important;
+  }
+
+  /* Forzar colores de fondo en el PDF */
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    background-color: white !important;
+  }
+
+  /* Ajustar el contenedor para que ocupe todo el ancho del papel */
+  .container {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Estilo para que las gráficas y tablas no se corten entre páginas */
+  canvas, table, .card {
+    page-break-inside: avoid;
+  }
+}
