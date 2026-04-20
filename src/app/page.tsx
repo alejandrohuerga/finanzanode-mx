@@ -11,18 +11,27 @@ import Link from 'next/link';
 import FAQSection from '@/components/FAQSection';
 import Footer from '@/components/Footer';
 
-// --- NUEVO COMPONENTE DE COMPARATIVA ---
-function ComparisonCards({ initialAmount, monthlyContribution, years }: { initialAmount: number, monthlyContribution: number, years: number }) {
+// --- COMPONENTE DE COMPARATIVA INTERACTIVA ---
+function ComparisonCards({ 
+  initialAmount, 
+  monthlyContribution, 
+  years,
+  onSelectScenario 
+}: { 
+  initialAmount: number, 
+  monthlyContribution: number, 
+  years: number,
+  onSelectScenario: (rate: number) => void 
+}) {
   const scenarios = [
-    { name: 'Cetes (Aprox)', rate: 11.0, color: 'bg-green-100 text-green-800' },
-    { name: 'SOFIPOs / Nu', rate: 14.5, color: 'bg-purple-100 text-purple-800' },
-    { name: 'S&P 500 (Promedio)', rate: 10.0, color: 'bg-blue-100 text-blue-800' },
+    { name: 'Cetes (Aprox)', rate: 11.0, color: 'bg-green-100 text-green-800 border-green-200' },
+    { name: 'SOFIPOs / Nu', rate: 14.5, color: 'bg-purple-100 text-purple-800 border-purple-200' },
+    { name: 'S&P 500 (Promedio)', rate: 10.0, color: 'bg-blue-100 text-blue-800 border-blue-200' },
   ];
 
   const calculateFinal = (rate: number) => {
     const r = rate / 100 / 12;
     const n = years * 12;
-    // Fórmula de interés compuesto: P(1+r)^n + PMT[((1+r)^n - 1) / r]
     const final = initialAmount * Math.pow(1 + r, n) + 
                   monthlyContribution * ((Math.pow(1 + r, n) - 1) / r);
     return final;
@@ -31,30 +40,36 @@ function ComparisonCards({ initialAmount, monthlyContribution, years }: { initia
   return (
     <div className="mt-10 no-print">
       <h3 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-        📊 Comparativa de Escenarios (Rendimiento Bruto)
+        📊 Comparativa de Escenarios (Clic para aplicar)
       </h3>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {scenarios.map((s) => (
-          <div key={s.name} className="p-5 border border-gray-200 rounded-2xl bg-white shadow-sm hover:shadow-md transition-shadow">
+          <button 
+            key={s.name} 
+            onClick={() => onSelectScenario(s.rate)}
+            className="p-5 border text-left rounded-2xl bg-white shadow-sm hover:shadow-md hover:border-blue-400 transition-all active:scale-95 group border-gray-200"
+          >
             <span className={`text-xs font-bold px-2 py-1 rounded-full ${s.color}`}>
               {s.rate}% Anual
             </span>
-            <h4 className="font-bold text-gray-800 mt-3">{s.name}</h4>
+            <h4 className="font-bold text-gray-800 mt-3 group-hover:text-blue-600 transition-colors">{s.name}</h4>
             <p className="text-2xl font-black text-gray-900 mt-1">
               ${calculateFinal(s.rate).toLocaleString('es-MX', { maximumFractionDigits: 0 })}
             </p>
-            <p className="text-gray-500 text-xs mt-1">Saldo final estimado</p>
-          </div>
+            <p className="text-blue-500 text-[10px] mt-2 font-bold opacity-0 group-hover:opacity-100 transition-opacity uppercase tracking-tighter">
+              ⚡ Aplicar esta tasa
+            </p>
+          </button>
         ))}
       </div>
-      <p className="text-[10px] text-gray-400 mt-4 italic">
+      <p className="text-[10px] text-gray-400 mt-4 italic text-center">
         *Cálculos informativos basados en capitalización mensual antes de impuestos e inflación.
       </p>
     </div>
   );
 }
 
-// 1. Componente interno con la lógica de la calculadora
+// --- LÓGICA INTERNA DE LA CALCULADORA ---
 function CalculatorContent() {
   const [results, setResults] = useState<CalculationResult[]>([]);
   const router = useRouter();
@@ -105,7 +120,21 @@ function CalculatorContent() {
       data.inflationRate
     );
     setResults(res);
-    window.scrollTo({ top: 400, behavior: 'smooth' });
+    // Solo hacemos scroll si el usuario hizo click manual en calcular
+    if (window.scrollY < 300) {
+        window.scrollTo({ top: 400, behavior: 'smooth' });
+    }
+  };
+
+  const handleSelectScenario = (newRate: number) => {
+    const data = {
+      initialAmount: Number(searchParams.get('i')) || 0,
+      monthlyContribution: Number(searchParams.get('m')) || 0,
+      annualRate: newRate,
+      years: Number(searchParams.get('y')) || 1,
+      inflationRate: Number(searchParams.get('inf')) || 4.5,
+    };
+    handleCalculate(data);
   };
 
   return (
@@ -115,15 +144,16 @@ function CalculatorContent() {
       {results.length > 0 && (
         <div className="mt-8 space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
           
+          {/* HEADER PDF */}
           <div className="hidden print:block mb-8 border-b-4 border-blue-600 pb-4 text-left">
             <h1 className="text-3xl font-bold text-blue-900">MxCalc - Reporte de Proyección</h1>
-            <p className="text-gray-600 text-sm">Análisis detallado de inversión, impuestos e inflación</p>
-            <p className="text-blue-600 font-medium mt-2 text-xs">Generado en: https://finanzanode-mx.vercel.app</p>
-            <p className="text-gray-400 text-xs">Fecha: {new Date().toLocaleDateString("es-MX")}</p>
+            <p className="text-gray-600 text-sm">Análisis detallado de inversión e impuestos</p>
+            <p className="text-blue-600 font-medium mt-2 text-xs">https://finanzanode-mx-q5ij.vercel.app</p>
           </div>
 
           <InvestmentChart data={results} />
           
+          {/* ACCIONES */}
           <div className="flex flex-col sm:flex-row gap-3 no-print">
             <button
               onClick={() => {
@@ -148,7 +178,7 @@ function CalculatorContent() {
               onClick={() => window.print()} 
               className="flex-1 bg-gray-900 text-white px-4 py-3 rounded-xl font-bold hover:bg-black transition-all shadow-lg flex items-center justify-center gap-2"
             >
-              📄 Descargar PDF
+              📄 PDF
             </button>
           </div>
 
@@ -166,11 +196,12 @@ function CalculatorContent() {
             </p>
           </div>
 
-          {/* AQUÍ INSERTAMOS LA COMPARATIVA */}
+          {/* COMPONENTE INTERACTIVO */}
           <ComparisonCards 
             initialAmount={Number(searchParams.get('i')) || 0}
             monthlyContribution={Number(searchParams.get('m')) || 0}
             years={Number(searchParams.get('y')) || 1}
+            onSelectScenario={handleSelectScenario}
           />
 
           <div className="mt-10 p-6 border-2 border-dashed border-blue-200 rounded-2xl bg-blue-50/50 no-print">
@@ -191,7 +222,7 @@ function CalculatorContent() {
   );
 }
 
-// 2. Componente principal (Home)
+// --- COMPONENTE PRINCIPAL (HOME) ---
 export default function Home() {
   return (
     <main className="min-h-screen bg-gray-50 py-12 px-4">
@@ -201,18 +232,11 @@ export default function Home() {
             Calculadora de Interés Compuesto México
           </h1>
           <p className="text-gray-600 text-lg">
-            Proyecta tu ahorro e inversión considerando el ISR estimado y
-            rendimientos reales.
+            Proyecta tu ahorro e inversión considerando el ISR estimado y rendimientos reales.
           </p>
         </header>
 
-        <Suspense
-          fallback={
-            <div className="text-center py-10 text-gray-500 text-sm italic">
-              Cargando calculadora...
-            </div>
-          }
-        >
+        <Suspense fallback={<div className="text-center py-10 text-gray-500 italic">Cargando calculadora...</div>}>
           <CalculatorContent />
         </Suspense>
 
@@ -235,7 +259,7 @@ export default function Home() {
               <h3 className="text-xl font-bold text-gray-900 mt-2 group-hover:text-blue-600 transition-colors">
                 Cetes vs. SOFIPOS: ¿Dónde ganar más?
               </h3>
-              <p className="text-gray-600 mt-3 text-sm leading-relaxed">
+              <p className="text-gray-600 mt-3 text-sm leading-relaxed text-pretty">
                 Descubre por qué las SOFIPOS pueden darte más dinero neto gracias a sus beneficios fiscales frente a Cetes.
               </p>
               <span className="inline-block mt-4 text-blue-600 font-semibold text-sm">Leer comparativa →</span>
@@ -246,7 +270,7 @@ export default function Home() {
               <h3 className="text-xl font-bold text-gray-900 mt-2 group-hover:text-blue-600 transition-colors">
                 ¿Tu AFORE será suficiente?
               </h3>
-              <p className="text-gray-600 mt-3 text-sm leading-relaxed">
+              <p className="text-gray-600 mt-3 text-sm leading-relaxed text-pretty">
                 La mayoría de los mexicanos recibirá menos del 50% de su sueldo. Aprende cómo evitar este riesgo.
               </p>
               <span className="inline-block mt-4 text-blue-600 font-semibold text-sm">Ver realidad del retiro →</span>
