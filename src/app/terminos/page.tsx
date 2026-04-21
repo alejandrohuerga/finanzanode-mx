@@ -37,7 +37,7 @@ export default function TerminosPage() {
         <section className="mb-8">
           <h2 className="text-xl font-semibold mb-3 text-gray-900">3. Uso de las Herramientas</h2>
           <p className="text-gray-700">
-            MxCalculos proporciona calculadoras y guías financieras de forma gratuita. El uso de estas herramientas es estrictamente personal. Queda prohibido el uso de sistemas automatizados (bots) para extraer datos.
+            MxCalc proporciona calculadoras y guías financieras de forma gratuita. El uso de estas herramientas es estrictamente personal. Queda prohibido el uso de sistemas automatizados (bots) para extraer datos.
           </p>
         </section>
 
