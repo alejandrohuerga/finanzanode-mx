@@ -79,6 +79,14 @@ export default function Footer() {
                   Contacto / Sugerencias
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/terminos"
+                  className="text-gray-600 hover:text-blue-600"
+                >
+                  Términos y Condiciones
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
