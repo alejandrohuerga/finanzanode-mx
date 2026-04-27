@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://finanzanode-mx.vercel.app/sitemap.xml
+Sitemap: https://mxcalc.com/sitemap.xml
