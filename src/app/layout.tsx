@@ -15,10 +15,16 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  // 1. URL BASE: Ayuda a Next.js a construir las rutas absolutas
+  metadataBase: new URL('https://mxcalc.com'),
+
   title: "Calculadora de Interés Compuesto México",
   description: "Calcula interés compuesto fácilmente para México",
-  
-   
+
+  // 2. CANONICAL: Esto soluciona el error de "Duplicada" en Search Console
+  alternates: {
+    canonical: '/',
+  },
 
   icons: {
     icon: '/favicon.ico',
@@ -36,22 +42,22 @@ export const metadata: Metadata = {
       },
     ],
   },
-  // 1. EL PUENTE: Esta es la línea que te faltaba
+  
   manifest: '/site.webmanifest',
   
   verification: {
     google: "csB5Pft1_WGrYNjGrcrfyjSC-ZfTvHa3j1S6GjP3_eo",
   },
+
   openGraph: {
     title: 'Calculadora de Interés Compuesto México',
     description: 'Proyecta tu futuro financiero con datos reales de México.',
-    url: 'https://www.mxcalc.com/',
+    url: 'https://mxcalc.com/', // Te recomiendo quitar el "www" si tu dominio principal es mxcalc.com
     siteName: 'MxCalc',
     locale: 'es_MX',
     type: 'website',
   },
 };
-
 
 export default function RootLayout({
   children,
