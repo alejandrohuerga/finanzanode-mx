@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 
   // 2. CANONICAL: Esto soluciona el error de "Duplicada" en Search Console
   alternates: {
-    canonical: '/',
+    canonical: 'https://mxcalc.com',
   },
 
   icons: {
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Calculadora de Interés Compuesto México',
     description: 'Proyecta tu futuro financiero con datos reales de México.',
-    url: 'https://mxcalc.com/', // Te recomiendo quitar el "www" si tu dominio principal es mxcalc.com
+    url: 'https://mxcalc.com', // Te recomiendo quitar el "www" si tu dominio principal es mxcalc.com
     siteName: 'MxCalc',
     locale: 'es_MX',
     type: 'website',
