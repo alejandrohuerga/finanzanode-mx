@@ -24,9 +24,9 @@ function ComparisonCards({
   onSelectScenario: (rate: number) => void 
 }) {
   const scenarios = [
-    { name: 'Cetes (Aprox)', rate: 11.0, color: 'bg-green-100 text-green-800 border-green-200' },
-    { name: 'SOFIPOs / Nu', rate: 14.5, color: 'bg-purple-100 text-purple-800 border-purple-200' },
-    { name: 'S&P 500 (Promedio)', rate: 10.0, color: 'bg-blue-100 text-blue-800 border-blue-200' },
+    { name: 'Cetes Directo (1 Año)', rate: 7.17, color: 'bg-green-100 text-green-800 border-green-200' },
+    { name: 'SOFIPOs / Nu (Aprox)', rate: 12.0, color: 'bg-purple-100 text-purple-800 border-purple-200' },
+    { name: 'S&P 500 (Promedio Histórico)', rate: 10.0, color: 'bg-blue-100 text-blue-800 border-blue-200' },
   ];
 
   const calculateFinal = (rate: number) => {
