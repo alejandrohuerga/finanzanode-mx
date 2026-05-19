@@ -219,15 +219,16 @@ function CalculatorContent() {
 
           <ResultsTable data={results} />
           
-          <div className="p-6 bg-blue-50 rounded-xl border border-blue-100 shadow-sm">
-            <h2 className="text-2xl font-bold text-blue-900">
+          
+          <div className="p-6 bg-slate-900 rounded-2xl border border-slate-800 shadow-xl text-white">
+            <h2 className="text-2xl font-black text-white">
               Resultado final: ${results[results.length - 1].balance.toLocaleString("es-MX")} MXN
             </h2>
-            <p className="text-amber-700 font-bold text-lg mt-1">
-              Poder adquisitivo real: ${results[results.length - 1].realBalance.toLocaleString("es-MX")} MXN
+            <p className="text-emerald-400 font-bold text-lg mt-2 flex items-center gap-1">
+              📉 Poder adquisitivo real: ${results[results.length - 1].realBalance.toLocaleString("es-MX")} MXN
             </p>
-            <p className="text-blue-700 font-medium">
-              En {results.length} años habrás construido este patrimonio.
+            <p className="text-slate-400 font-medium text-sm mt-1 border-t border-slate-800 pt-2">
+              En {results.length} años habrás construido este patrimonio (ajustado a la inflación estimada).
             </p>
           </div>
 
