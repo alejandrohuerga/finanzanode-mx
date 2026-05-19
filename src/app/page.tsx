@@ -9,7 +9,7 @@ import ResultsTable from '@/components/ResultsTable';
 import Testimonials from '@/components/Testimonials';
 import Link from 'next/link';
 import FAQSection from '@/components/FAQSection';
-import Footer from '@/components/Footer';
+import Footer from '@/components/Footer';;
 
 // --- COMPONENTE DE COMPARATIVA INTERACTIVA ---
 function ComparisonCards({ 
@@ -72,6 +72,7 @@ function ComparisonCards({
 // --- LÓGICA INTERNA DE LA CALCULADORA ---
 function CalculatorContent() {
   const [results, setResults] = useState<CalculationResult[]>([]);
+  const [activeRate, setActiveRate] = useState<string>("");
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -127,14 +128,48 @@ function CalculatorContent() {
   };
 
   const handleSelectScenario = (newRate: number) => {
+    // Sincronizamos el estado del input pasándole el string al hijo (ej: "13.0")
+    setActiveRate(newRate.toString());
+
+    // Obtenemos los valores limpios de los parámetros actuales de la URL
+    const currentInitial = Number(searchParams.get('i')?.replace(/,/g, ""));
+    const currentMonthly = Number(searchParams.get('m')?.replace(/,/g, ""));
+    const currentYears = Number(searchParams.get('y'));
+    const currentInflation = Number(searchParams.get('inf'));
+
     const data = {
-      initialAmount: Number(searchParams.get('i')) || 0,
-      monthlyContribution: Number(searchParams.get('m')) || 0,
-      annualRate: newRate,
-      years: Number(searchParams.get('y')) || 1,
-      inflationRate: Number(searchParams.get('inf')) || 4.5,
+      // Si la URL no tiene datos aún, usamos los mismos valores por defecto que el formulario hijo
+      initialAmount: currentInitial || 10000,
+      monthlyContribution: currentMonthly || 1000,
+      years: currentYears || 10,
+      inflationRate: currentInflation ? (currentInflation / 100) : 0.045,
+      // PASAMOS LA TASA DIRECTAMENTE EN FORMATO DECIMAL PARA LA LIBRERÍA (ej: 13.0 / 100 = 0.13)
+      annualRate: newRate / 100, 
     };
-    handleCalculate(data);
+    
+    // Ejecutamos el cálculo directamente con los datos formateados
+    const res = calculateCompoundInterest(
+      data.initialAmount,
+      data.monthlyContribution,
+      data.annualRate,
+      data.years,
+      data.inflationRate
+    );
+    setResults(res);
+
+    // Actualizamos la URL para que el navegador refleje el estado correcto
+    const params = new URLSearchParams();
+    params.set('i', data.initialAmount.toString());
+    params.set('m', data.monthlyContribution.toString());
+    params.set('r', newRate.toString()); // Guardamos el valor limpio en la URL (ej: "13.0")
+    params.set('y', data.years.toString());
+    params.set('inf', (data.inflationRate * 100).toFixed(1));
+    
+    router.push(`?${params.toString()}`, { scroll: false });
+
+    if (window.scrollY < 300) {
+        window.scrollTo({ top: 400, behavior: 'smooth' });
+    }
   };
 
   return (
