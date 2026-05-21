@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from '@/components/NavBar';
+import Navbar from "@/components/NavBar";
 import { Analytics } from "@vercel/analytics/react";
-import { GoogleAnalytics } from '@next/third-parties/google'
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,19 +16,19 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   // 1. URL BASE: Ayuda a Next.js a construir las rutas absolutas
-  metadataBase: new URL('https://mxcalc.com'),
+  metadataBase: new URL("https://mxcalc.com"),
 
   title: "Calculadora de Interés Compuesto México",
   description: "Calcula interés compuesto fácilmente para México",
 
   // 2. CANONICAL: Esto soluciona el error de "Duplicada" en Search Console
   alternates: {
-    canonical: 'https://mxcalc.com',
+    canonical: "https://mxcalc.com",
   },
 
   icons: {
-    icon: '/favicon.ico',
-    apple: '/apple-touch-icon.png',
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
     other: [
       {
         rel: "icon",
@@ -42,20 +42,20 @@ export const metadata: Metadata = {
       },
     ],
   },
-  
-  manifest: '/site.webmanifest',
-  
+
+  manifest: "/site.webmanifest",
+
   verification: {
     google: "csB5Pft1_WGrYNjGrcrfyjSC-ZfTvHa3j1S6GjP3_eo",
   },
 
   openGraph: {
-    title: 'Calculadora de Interés Compuesto México',
-    description: 'Proyecta tu futuro financiero con datos reales de México.',
-    url: 'https://mxcalc.com', // Te recomiendo quitar el "www" si tu dominio principal es mxcalc.com
-    siteName: 'MxCalc',
-    locale: 'es_MX',
-    type: 'website',
+    title: "Calculadora de Interés Compuesto México",
+    description: "Proyecta tu futuro financiero con datos reales de México.",
+    url: "https://mxcalc.com", // Te recomiendo quitar el "www" si tu dominio principal es mxcalc.com
+    siteName: "MxCalc",
+    locale: "es_MX",
+    type: "website",
   },
 };
 
@@ -70,10 +70,10 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
-        <Navbar/>
+        <Navbar />
         {children}
-        <Analytics/>
-        <GoogleAnalytics gaId="G-DSWFC2C4DY"/>
+        <Analytics />
+        <GoogleAnalytics gaId="G-DSWFC2C4DY" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
