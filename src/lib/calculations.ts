@@ -37,36 +37,47 @@ export const calculateCompoundInterest = (
     let interestThisYear = 0;
     let taxThisYear = 0;
 
+    for (let year = 1; year <= years; year++) {
+    let interestThisYear = 0;
+    let taxThisYear = 0;
+
+    // Calculamos la tasa mensual exacta para que al año rinda exactamente la tasa anual (Tasa Equivalente)
+    // Fórmula: (1 + r)^(1/12) - 1
+    const monthlyRateClean = Math.pow(1 + cleanRate, 1 / 12) - 1;
+    const monthlyRateSOFIPO = Math.pow(1 + SOFIPO_BASE_RATE, 1 / 12) - 1;
+
     for (let month = 1; month <= 12; month++) {
-      let monthlyInterest = 0;
+        let monthlyInterest = 0;
 
-      // Aplicar regla marginal si es tasa alta de SOFIPO
-      if (cleanRate > 0.11) {
-        if (currentBalance <= SOFIPO_LIMIT) {
-          monthlyInterest = currentBalance * (cleanRate / 12);
+        // Aplicar regla marginal si es tasa alta de SOFIPO (ej: Nu)
+        if (cleanRate > 0.11) {
+          if (currentBalance <= SOFIPO_LIMIT) {
+            monthlyInterest = currentBalance * monthlyRateClean;
+          } else {
+            const topTierInterest = SOFIPO_LIMIT * monthlyRateClean;
+            const lowerTierInterest = (currentBalance - SOFIPO_LIMIT) * monthlyRateSOFIPO;
+            monthlyInterest = topTierInterest + lowerTierInterest;
+          }
         } else {
-          const topTierInterest = SOFIPO_LIMIT * (cleanRate / 12);
-          const lowerTierInterest = (currentBalance - SOFIPO_LIMIT) * (SOFIPO_BASE_RATE / 12);
-          monthlyInterest = topTierInterest + lowerTierInterest;
+          // Para Cetes o S&P 500, usamos la tasa equivalente mensual exacta
+          monthlyInterest = currentBalance * monthlyRateClean;
         }
-      } else {
-        monthlyInterest = currentBalance * (cleanRate / 12);
-      }
 
-      // El ISR en México se cobra sobre el Capital Total (tasa provisional)
-      const monthlyTax = currentBalance * (cleanTax / 12);
-      
-      // Ajustamos el balance del mes
-      currentBalance += monthlyInterest + monthlyContribution - monthlyTax;
-      
-      // Acumuladores del año actual
-      interestThisYear += monthlyInterest;
-      taxThisYear += monthlyTax;
+        // El ISR en México se cobra sobre el Capital Total (tasa provisional anualizada)
+        // Como es mensual, lo dividimos entre 12
+        const monthlyTax = currentBalance * (cleanTax / 12);
+        
+        // Ajustamos el balance del mes
+        currentBalance += monthlyInterest + monthlyContribution - monthlyTax;
+        
+        // Acumuladores del año actual
+        interestThisYear += monthlyInterest;
+        taxThisYear += monthlyTax;
 
-      // Acumuladores históricos de toda la vida de la inversión
-      cumulativeInterests += monthlyInterest;
-      cumulativeContributions += monthlyContribution;
-      cumulativeTax += monthlyTax;
+        // Acumuladores históricos
+        cumulativeInterests += monthlyInterest;
+        cumulativeContributions += monthlyContribution;
+        cumulativeTax += monthlyTax;
     }
 
     // Calculamos el poder adquisitivo real acumulado correctamente
