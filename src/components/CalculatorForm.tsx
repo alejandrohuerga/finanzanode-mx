@@ -16,7 +16,7 @@ export default function CalculatorForm({ onCalculate }: CalculatorFormProps) {
   // Estados como strings para manejar mejor la limpieza de inputs y formateo
   const [initialAmount, setInitialAmount] = useState("10,000");
   const [monthlyContribution, setMonthlyContribution] = useState("1,000");
-  const [annualRate, setAnnualRate] = useState("11");
+  const [annualRate, setAnnualRate] = useState("7.17"); // Tasa oficial CETES 1 año (Mayo 2026)
   const [years, setYears] = useState("10");
   const [inflationRate, setInflationRate] = useState("4.5");
 

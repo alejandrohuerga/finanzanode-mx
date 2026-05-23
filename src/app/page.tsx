@@ -9,7 +9,7 @@ import ResultsTable from '@/components/ResultsTable';
 import Testimonials from '@/components/Testimonials';
 import Link from 'next/link';
 import FAQSection from '@/components/FAQSection';
-import Footer from '@/components/Footer';
+import Footer from '@/components/Footer';;
 
 // --- COMPONENTE DE COMPARATIVA INTERACTIVA ---
 function ComparisonCards({ 
@@ -24,9 +24,9 @@ function ComparisonCards({
   onSelectScenario: (rate: number) => void 
 }) {
   const scenarios = [
-    { name: 'Cetes (Aprox)', rate: 11.0, color: 'bg-green-100 text-green-800 border-green-200' },
-    { name: 'SOFIPOs / Nu', rate: 14.5, color: 'bg-purple-100 text-purple-800 border-purple-200' },
-    { name: 'S&P 500 (Promedio)', rate: 10.0, color: 'bg-blue-100 text-blue-800 border-blue-200' },
+    { name: 'Cetes Directo (1 Año)', rate: 7.17, color: 'bg-green-100 text-green-800 border-green-200' },
+    { name: 'SOFIPOs / Nu (Aprox)', rate: 12.0, color: 'bg-purple-100 text-purple-800 border-purple-200' },
+    { name: 'S&P 500 (Promedio Histórico)', rate: 10.0, color: 'bg-blue-100 text-blue-800 border-blue-200' },
   ];
 
   const calculateFinal = (rate: number) => {
@@ -72,6 +72,7 @@ function ComparisonCards({
 // --- LÓGICA INTERNA DE LA CALCULADORA ---
 function CalculatorContent() {
   const [results, setResults] = useState<CalculationResult[]>([]);
+  const [activeRate, setActiveRate] = useState<string>("");
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -127,14 +128,48 @@ function CalculatorContent() {
   };
 
   const handleSelectScenario = (newRate: number) => {
+    // Sincronizamos el estado del input pasándole el string al hijo (ej: "13.0")
+    setActiveRate(newRate.toString());
+
+    // Obtenemos los valores limpios de los parámetros actuales de la URL
+    const currentInitial = Number(searchParams.get('i')?.replace(/,/g, ""));
+    const currentMonthly = Number(searchParams.get('m')?.replace(/,/g, ""));
+    const currentYears = Number(searchParams.get('y'));
+    const currentInflation = Number(searchParams.get('inf'));
+
     const data = {
-      initialAmount: Number(searchParams.get('i')) || 0,
-      monthlyContribution: Number(searchParams.get('m')) || 0,
-      annualRate: newRate,
-      years: Number(searchParams.get('y')) || 1,
-      inflationRate: Number(searchParams.get('inf')) || 4.5,
+      // Si la URL no tiene datos aún, usamos los mismos valores por defecto que el formulario hijo
+      initialAmount: currentInitial || 10000,
+      monthlyContribution: currentMonthly || 1000,
+      years: currentYears || 10,
+      inflationRate: currentInflation ? (currentInflation / 100) : 0.045,
+      // PASAMOS LA TASA DIRECTAMENTE EN FORMATO DECIMAL PARA LA LIBRERÍA (ej: 13.0 / 100 = 0.13)
+      annualRate: newRate / 100, 
     };
-    handleCalculate(data);
+    
+    // Ejecutamos el cálculo directamente con los datos formateados
+    const res = calculateCompoundInterest(
+      data.initialAmount,
+      data.monthlyContribution,
+      data.annualRate,
+      data.years,
+      data.inflationRate
+    );
+    setResults(res);
+
+    // Actualizamos la URL para que el navegador refleje el estado correcto
+    const params = new URLSearchParams();
+    params.set('i', data.initialAmount.toString());
+    params.set('m', data.monthlyContribution.toString());
+    params.set('r', newRate.toString()); // Guardamos el valor limpio en la URL (ej: "13.0")
+    params.set('y', data.years.toString());
+    params.set('inf', (data.inflationRate * 100).toFixed(1));
+    
+    router.push(`?${params.toString()}`, { scroll: false });
+
+    if (window.scrollY < 300) {
+        window.scrollTo({ top: 400, behavior: 'smooth' });
+    }
   };
 
   return (
@@ -184,15 +219,16 @@ function CalculatorContent() {
 
           <ResultsTable data={results} />
           
-          <div className="p-6 bg-blue-50 rounded-xl border border-blue-100 shadow-sm">
-            <h2 className="text-2xl font-bold text-blue-900">
+          
+          <div className="p-6 bg-slate-900 rounded-2xl border border-slate-800 shadow-xl text-white">
+            <h2 className="text-2xl font-black text-white">
               Resultado final: ${results[results.length - 1].balance.toLocaleString("es-MX")} MXN
             </h2>
-            <p className="text-amber-700 font-bold text-lg mt-1">
-              Poder adquisitivo real: ${results[results.length - 1].realBalance.toLocaleString("es-MX")} MXN
+            <p className="text-emerald-400 font-bold text-lg mt-2 flex items-center gap-1">
+              📉 Poder adquisitivo real: ${results[results.length - 1].realBalance.toLocaleString("es-MX")} MXN
             </p>
-            <p className="text-blue-700 font-medium">
-              En {results.length} años habrás construido este patrimonio.
+            <p className="text-slate-400 font-medium text-sm mt-1 border-t border-slate-800 pt-2">
+              En {results.length} años habrás construido este patrimonio (ajustado a la inflación estimada).
             </p>
           </div>
 
