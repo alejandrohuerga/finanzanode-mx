@@ -1,39 +1,55 @@
 "use client";
-import { useState, useEffect, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { calculateCompoundInterest, type CalculationResult } from '@/lib/calculations';
-import CalculatorForm from '@/components/CalculatorForm';
-import InvestmentChart from '@/components/InvestmentChart';
-import SEOContent from '@/components/SEOContent';
-import ResultsTable from '@/components/ResultsTable';
-import Testimonials from '@/components/Testimonials';
-import Link from 'next/link';
-import FAQSection from '@/components/FAQSection';
-import Footer from '@/components/Footer';;
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import {
+  calculateCompoundInterest,
+  type CalculationResult,
+} from "@/lib/calculations";
+import CalculatorForm from "@/components/CalculatorForm";
+import InvestmentChart from "@/components/InvestmentChart";
+import SEOContent from "@/components/SEOContent";
+import ResultsTable from "@/components/ResultsTable";
+import Testimonials from "@/components/Testimonials";
+import Link from "next/link";
+import FAQSection from "@/components/FAQSection";
+import Footer from "@/components/Footer";
 
 // --- COMPONENTE DE COMPARATIVA INTERACTIVA ---
-function ComparisonCards({ 
-  initialAmount, 
-  monthlyContribution, 
+function ComparisonCards({
+  initialAmount,
+  monthlyContribution,
   years,
-  onSelectScenario 
-}: { 
-  initialAmount: number, 
-  monthlyContribution: number, 
-  years: number,
-  onSelectScenario: (rate: number) => void 
+  onSelectScenario,
+}: {
+  initialAmount: number;
+  monthlyContribution: number;
+  years: number;
+  onSelectScenario: (rate: number) => void;
 }) {
   const scenarios = [
-    { name: 'Cetes Directo (1 Año)', rate: 7.17, color: 'bg-green-100 text-green-800 border-green-200' },
-    { name: 'SOFIPOs / Nu (Aprox)', rate: 12.0, color: 'bg-purple-100 text-purple-800 border-purple-200' },
-    { name: 'S&P 500 (Promedio Histórico)', rate: 10.0, color: 'bg-blue-100 text-blue-800 border-blue-200' },
+    {
+      name: "Cetes Directo (1 Año)",
+      rate: 7.17,
+      color: "bg-green-100 text-green-800 border-green-200",
+    },
+    {
+      name: "SOFIPOs / Nu (Aprox)",
+      rate: 12.0,
+      color: "bg-purple-100 text-purple-800 border-purple-200",
+    },
+    {
+      name: "S&P 500 (Promedio Histórico)",
+      rate: 10.0,
+      color: "bg-blue-100 text-blue-800 border-blue-200",
+    },
   ];
 
   const calculateFinal = (rate: number) => {
     const r = rate / 100 / 12;
     const n = years * 12;
-    const final = initialAmount * Math.pow(1 + r, n) + 
-                  monthlyContribution * ((Math.pow(1 + r, n) - 1) / r);
+    const final =
+      initialAmount * Math.pow(1 + r, n) +
+      monthlyContribution * ((Math.pow(1 + r, n) - 1) / r);
     return final;
   };
 
@@ -44,17 +60,24 @@ function ComparisonCards({
       </h3>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {scenarios.map((s) => (
-          <button 
-            key={s.name} 
+          <button
+            key={s.name}
             onClick={() => onSelectScenario(s.rate)}
             className="p-5 border text-left rounded-2xl bg-white shadow-sm hover:shadow-md hover:border-blue-400 transition-all active:scale-95 group border-gray-200"
           >
-            <span className={`text-xs font-bold px-2 py-1 rounded-full ${s.color}`}>
+            <span
+              className={`text-xs font-bold px-2 py-1 rounded-full ${s.color}`}
+            >
               {s.rate}% Anual
             </span>
-            <h4 className="font-bold text-gray-800 mt-3 group-hover:text-blue-600 transition-colors">{s.name}</h4>
+            <h4 className="font-bold text-gray-800 mt-3 group-hover:text-blue-600 transition-colors">
+              {s.name}
+            </h4>
             <p className="text-2xl font-black text-gray-900 mt-1">
-              ${calculateFinal(s.rate).toLocaleString('es-MX', { maximumFractionDigits: 0 })}
+              $
+              {calculateFinal(s.rate).toLocaleString("es-MX", {
+                maximumFractionDigits: 0,
+              })}
             </p>
             <p className="text-blue-500 text-[10px] mt-2 font-bold opacity-0 group-hover:opacity-100 transition-opacity uppercase tracking-tighter">
               ⚡ Aplicar esta tasa
@@ -63,7 +86,8 @@ function ComparisonCards({
         ))}
       </div>
       <p className="text-[10px] text-gray-400 mt-4 italic text-center">
-        *Cálculos informativos basados en capitalización mensual antes de impuestos e inflación.
+        *Cálculos informativos basados en capitalización mensual antes de
+        impuestos e inflación.
       </p>
     </div>
   );
@@ -77,21 +101,21 @@ function CalculatorContent() {
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const initial = searchParams.get('i');
+    const initial = searchParams.get("i");
     if (initial) {
       const data = {
-        initialAmount: Number(searchParams.get('i')),
-        monthlyContribution: Number(searchParams.get('m')),
-        annualRate: Number(searchParams.get('r')),
-        years: Number(searchParams.get('y')),
-        inflationRate: Number(searchParams.get('inf')) || 4.5,
+        initialAmount: Number(searchParams.get("i")),
+        monthlyContribution: Number(searchParams.get("m")),
+        annualRate: Number(searchParams.get("r")),
+        years: Number(searchParams.get("y")),
+        inflationRate: Number(searchParams.get("inf")) || 4.5,
       };
       const res = calculateCompoundInterest(
         data.initialAmount,
         data.monthlyContribution,
         data.annualRate,
         data.years,
-        data.inflationRate
+        data.inflationRate,
       );
       setResults(res);
     }
@@ -105,12 +129,12 @@ function CalculatorContent() {
     inflationRate: number;
   }) => {
     const params = new URLSearchParams();
-    params.set('i', data.initialAmount.toString());
-    params.set('m', data.monthlyContribution.toString());
-    params.set('r', data.annualRate.toString());
-    params.set('y', data.years.toString());
-    params.set('inf', data.inflationRate.toString());
-    
+    params.set("i", data.initialAmount.toString());
+    params.set("m", data.monthlyContribution.toString());
+    params.set("r", data.annualRate.toString());
+    params.set("y", data.years.toString());
+    params.set("inf", data.inflationRate.toString());
+
     router.push(`?${params.toString()}`, { scroll: false });
 
     const res = calculateCompoundInterest(
@@ -118,12 +142,12 @@ function CalculatorContent() {
       data.monthlyContribution,
       data.annualRate,
       data.years,
-      data.inflationRate
+      data.inflationRate,
     );
     setResults(res);
     // Solo hacemos scroll si el usuario hizo click manual en calcular
     if (window.scrollY < 300) {
-        window.scrollTo({ top: 400, behavior: 'smooth' });
+      window.scrollTo({ top: 400, behavior: "smooth" });
     }
   };
 
@@ -132,43 +156,43 @@ function CalculatorContent() {
     setActiveRate(newRate.toString());
 
     // Obtenemos los valores limpios de los parámetros actuales de la URL
-    const currentInitial = Number(searchParams.get('i')?.replace(/,/g, ""));
-    const currentMonthly = Number(searchParams.get('m')?.replace(/,/g, ""));
-    const currentYears = Number(searchParams.get('y'));
-    const currentInflation = Number(searchParams.get('inf'));
+    const currentInitial = Number(searchParams.get("i")?.replace(/,/g, ""));
+    const currentMonthly = Number(searchParams.get("m")?.replace(/,/g, ""));
+    const currentYears = Number(searchParams.get("y"));
+    const currentInflation = Number(searchParams.get("inf"));
 
     const data = {
       // Si la URL no tiene datos aún, usamos los mismos valores por defecto que el formulario hijo
       initialAmount: currentInitial || 10000,
       monthlyContribution: currentMonthly || 1000,
       years: currentYears || 10,
-      inflationRate: currentInflation ? (currentInflation / 100) : 0.045,
+      inflationRate: currentInflation ? currentInflation / 100 : 0.045,
       // PASAMOS LA TASA DIRECTAMENTE EN FORMATO DECIMAL PARA LA LIBRERÍA (ej: 13.0 / 100 = 0.13)
-      annualRate: newRate / 100, 
+      annualRate: newRate / 100,
     };
-    
+
     // Ejecutamos el cálculo directamente con los datos formateados
     const res = calculateCompoundInterest(
       data.initialAmount,
       data.monthlyContribution,
       data.annualRate,
       data.years,
-      data.inflationRate
+      data.inflationRate,
     );
     setResults(res);
 
     // Actualizamos la URL para que el navegador refleje el estado correcto
     const params = new URLSearchParams();
-    params.set('i', data.initialAmount.toString());
-    params.set('m', data.monthlyContribution.toString());
-    params.set('r', newRate.toString()); // Guardamos el valor limpio en la URL (ej: "13.0")
-    params.set('y', data.years.toString());
-    params.set('inf', (data.inflationRate * 100).toFixed(1));
-    
+    params.set("i", data.initialAmount.toString());
+    params.set("m", data.monthlyContribution.toString());
+    params.set("r", newRate.toString()); // Guardamos el valor limpio en la URL (ej: "13.0")
+    params.set("y", data.years.toString());
+    params.set("inf", (data.inflationRate * 100).toFixed(1));
+
     router.push(`?${params.toString()}`, { scroll: false });
 
     if (window.scrollY < 300) {
-        window.scrollTo({ top: 400, behavior: 'smooth' });
+      window.scrollTo({ top: 400, behavior: "smooth" });
     }
   };
 
@@ -178,16 +202,21 @@ function CalculatorContent() {
 
       {results.length > 0 && (
         <div className="mt-8 space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
-          
           {/* HEADER PDF */}
           <div className="hidden print:block mb-8 border-b-4 border-blue-600 pb-4 text-left">
-            <h1 className="text-3xl font-bold text-blue-900">MxCalc - Reporte de Proyección</h1>
-            <p className="text-gray-600 text-sm">Análisis detallado de inversión e impuestos</p>
-            <p className="text-blue-600 font-medium mt-2 text-xs">https://finanzanode-mx-q5ij.vercel.app</p>
+            <h1 className="text-3xl font-bold text-blue-900">
+              MxCalc - Reporte de Proyección
+            </h1>
+            <p className="text-gray-600 text-sm">
+              Análisis detallado de inversión e impuestos
+            </p>
+            <p className="text-blue-600 font-medium mt-2 text-xs">
+              https://finanzanode-mx-q5ij.vercel.app
+            </p>
           </div>
 
           <InvestmentChart data={results} />
-          
+
           {/* ACCIONES */}
           <div className="flex flex-col sm:flex-row gap-3 no-print">
             <button
@@ -199,7 +228,7 @@ function CalculatorContent() {
             >
               🔗 Copiar Enlace
             </button>
-            
+
             <a
               href={`https://wa.me/?text=${encodeURIComponent(`¡Mira la proyección que hice en MxCalc! Mi patrimonio estimado es de $${results[results.length - 1].balance.toLocaleString("es-MX")} MXN. Chécalo aquí: ` + window.location.href)}`}
               target="_blank"
@@ -209,8 +238,8 @@ function CalculatorContent() {
               WhatsApp
             </a>
 
-            <button 
-              onClick={() => window.print()} 
+            <button
+              onClick={() => window.print()}
               className="flex-1 bg-gray-900 text-white px-4 py-3 rounded-xl font-bold hover:bg-black transition-all shadow-lg flex items-center justify-center gap-2"
             >
               📄 PDF
@@ -218,35 +247,40 @@ function CalculatorContent() {
           </div>
 
           <ResultsTable data={results} />
-          
-          
+
           <div className="p-6 bg-slate-900 rounded-2xl border border-slate-800 shadow-xl text-white">
             <h2 className="text-2xl font-black text-white">
-              Resultado final: ${results[results.length - 1].balance.toLocaleString("es-MX")} MXN
+              Resultado final: $
+              {results[results.length - 1].balance.toLocaleString("es-MX")} MXN
             </h2>
             <p className="text-emerald-400 font-bold text-lg mt-2 flex items-center gap-1">
-              📉 Poder adquisitivo real: ${results[results.length - 1].realBalance.toLocaleString("es-MX")} MXN
+              📉 Poder adquisitivo real: $
+              {results[results.length - 1].realBalance.toLocaleString("es-MX")}{" "}
+              MXN
             </p>
             <p className="text-slate-400 font-medium text-sm mt-1 border-t border-slate-800 pt-2">
-              En {results.length} años habrás construido este patrimonio (ajustado a la inflación estimada).
+              En {results.length} años habrás construido este patrimonio
+              (ajustado a la inflación estimada).
             </p>
           </div>
 
           {/* COMPONENTE INTERACTIVO */}
-          <ComparisonCards 
-            initialAmount={Number(searchParams.get('i')) || 0}
-            monthlyContribution={Number(searchParams.get('m')) || 0}
-            years={Number(searchParams.get('y')) || 1}
+          <ComparisonCards
+            initialAmount={Number(searchParams.get("i")) || 0}
+            monthlyContribution={Number(searchParams.get("m")) || 0}
+            years={Number(searchParams.get("y")) || 1}
             onSelectScenario={handleSelectScenario}
           />
 
           <div className="mt-10 p-6 border-2 border-dashed border-blue-200 rounded-2xl bg-blue-50/50 no-print">
-            <h4 className="text-blue-900 font-bold mb-2">💡 ¿Buscas optimizar tu retiro?</h4>
+            <h4 className="text-blue-900 font-bold mb-2">
+              💡 ¿Buscas optimizar tu retiro?
+            </h4>
             <p className="text-blue-800 text-sm mb-4">
               Un PPR puede ayudarte a ahorrar miles de pesos en impuestos...
             </p>
-            <Link 
-              href="/guia-ppr" 
+            <Link
+              href="/guia-ppr"
               className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-md"
             >
               Leer guía: Cómo evaluar un PPR →
@@ -268,57 +302,196 @@ export default function Home() {
             Calculadora de Interés Compuesto México
           </h1>
           <p className="text-gray-600 text-lg">
-            Proyecta tu ahorro e inversión considerando el ISR estimado y rendimientos reales.
+            Proyecta tu ahorro e inversión considerando el ISR estimado y
+            rendimientos reales.
           </p>
         </header>
 
-        <Suspense fallback={<div className="text-center py-10 text-gray-500 italic">Cargando calculadora...</div>}>
+        <Suspense
+          fallback={
+            <div className="text-center py-10 text-gray-500 italic">
+              Cargando calculadora...
+            </div>
+          }
+        >
           <CalculatorContent />
         </Suspense>
 
         <div className="mt-8 p-6 bg-amber-50 border-2 border-dashed border-amber-200 rounded-2xl text-center no-print">
-          <h3 className="text-lg font-bold text-amber-900">¿Tienes alguna sugerencia? 💡</h3>
-          <p className="text-amber-800 text-sm mb-4">Me encantaría saber qué otras funciones te ayudarían.</p>
-          <a 
-            href="mailto:finanzasmxinterescompuesto@gmail.com?subject=Feedback MxCalc" 
+          <h3 className="text-lg font-bold text-amber-900">
+            ¿Tienes alguna sugerencia? 💡
+          </h3>
+          <p className="text-amber-800 text-sm mb-4">
+            Me encantaría saber qué otras funciones te ayudarían.
+          </p>
+          <a
+            href="mailto:finanzasmxinterescompuesto@gmail.com?subject=Feedback MxCalc"
             className="inline-block bg-amber-500 text-white px-6 py-2 rounded-full font-bold hover:bg-amber-600 transition-all"
           >
             Enviar sugerencia
           </a>
         </div>
 
-        <section className="mt-20 no-print">
-          <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">Aprende a invertir como un experto</h2>
+        <section className="mt-16 max-w-4xl mx-auto px-4 sm:px-6">
+          {/* Encabezado Principal con Línea Decorativa */}
+          <div className="border-b border-gray-100 pb-6 mb-10 text-center sm:text-left">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">
+              ¿Cómo calcular el rendimiento de tus inversiones en México?
+            </h2>
+            <p className="mt-3 text-lg text-gray-500 max-w-3xl">
+              Invertir en plataformas financieras en México, como Cetes Directo,
+              Sofipos o pagarés bancarios, es una de las mejores decisiones para
+              proteger tu dinero de la inflación. Sin embargo, comprender cómo
+              se calcula el rendimiento real de tu capital puede ser confuso
+              debido a variables como la tasa de interés anual nominal, el plazo
+              seleccionado y las retenciones fiscales.
+            </p>
+          </div>
+
+          {/* Grid de Contenido Estilo Moderno */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Link href="/cetes-vs-sofipos" className="group p-6 bg-white border border-gray-200 rounded-2xl hover:border-blue-500 hover:shadow-md transition-all">
-              <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">Comparativa 2026</span>
+            {/* Tarjeta 1: Tasa Nominal vs Real */}
+            <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-200">
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="p-2 bg-blue-50 rounded-lg text-blue-600">
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 002 2h2a2 2 0 002-2"
+                    ></path>
+                  </svg>
+                </div>
+                <h3 className="text-lg font-bold text-gray-900">
+                  Diferencia entre Tasa Nominal y Tasa Real
+                </h3>
+              </div>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                La <strong className="text-gray-900">tasa nominal</strong> es el
+                porcentaje de rendimiento bruto que una institución financiera
+                te promete al inicio de tu inversión. Por otro lado, la{" "}
+                <strong className="text-gray-900">tasa real</strong> es la
+                ganancia que verdaderamente obtienes tras descontar la inflación
+                y la retención del Impuesto Sobre la Renta (ISR) que aplica el
+                gobierno mexicano año con año.
+              </p>
+            </div>
+
+            {/* Tarjeta 2: Interés Compuesto */}
+            <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-200">
+              <div className="flex items-center space-x-3 mb-3">
+                <div className="p-2 bg-indigo-50 rounded-lg text-indigo-600">
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+                    ></path>
+                  </svg>
+                </div>
+                <h3 className="text-lg font-bold text-gray-900">
+                  Interés Compuesto en plazos cortos
+                </h3>
+              </div>
+              <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                Cuando realizas inversiones a plazos de 28, 91 o 182 días,
+                tienes la oportunidad de aprovechar el interés compuesto al
+                reinvertir tus ganancias de forma constante.
+              </p>
+              <div className="bg-gray-50 rounded-xl p-3 border border-gray-100 flex items-center justify-between">
+                <span className="text-xs font-mono text-gray-400 uppercase tracking-wider">
+                  Fórmula mensual:
+                </span>
+                <code className="text-xs font-mono font-bold text-indigo-600 bg-indigo-50/50 px-2 py-1 rounded border border-indigo-100">
+                  r_m = (1 + r)^(1/12) - 1
+                </code>
+              </div>
+            </div>
+          </div>
+
+          {/* Banner Inferior: ¿Por qué usar MXCalc? */}
+          <div className="mt-6 bg-gradient-to-r from-gray-900 to-slate-800 rounded-2xl p-6 sm:p-8 text-white shadow-xl">
+            <div className="max-w-3xl">
+              <h3 className="text-xl font-bold mb-2 flex items-center space-x-2">
+                <span>✨</span>
+                <span>¿Por qué usar MXCalc para tus proyecciones?</span>
+              </h3>
+              <p className="text-gray-300 text-sm sm:text-base leading-relaxed">
+                Nuestra herramienta gratuita{" "}
+                <strong className="text-white">MXCalc</strong> está diseñada
+                bajo las normativas matemáticas financieras utilizadas en el
+                mercado de valores de México. Te permite visualizar de manera
+                clara el crecimiento de tu dinero a lo largo del tiempo,
+                facilitando la comparación entre diferentes opciones de
+                inversión del mercado para que tomes decisiones informadas y
+                maximices tu patrimonio.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-20 no-print">
+          <h2 className="text-2xl font-bold text-gray-900 mb-8 text-center">
+            Aprende a invertir como un experto
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Link
+              href="/cetes-vs-sofipos"
+              className="group p-6 bg-white border border-gray-200 rounded-2xl hover:border-blue-500 hover:shadow-md transition-all"
+            >
+              <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">
+                Comparativa 2026
+              </span>
               <h3 className="text-xl font-bold text-gray-900 mt-2 group-hover:text-blue-600 transition-colors">
                 Cetes vs. SOFIPOS: ¿Dónde ganar más?
               </h3>
               <p className="text-gray-600 mt-3 text-sm leading-relaxed text-pretty">
-                Descubre por qué las SOFIPOS pueden darte más dinero neto gracias a sus beneficios fiscales frente a Cetes.
+                Descubre por qué las SOFIPOS pueden darte más dinero neto
+                gracias a sus beneficios fiscales frente a Cetes.
               </p>
-              <span className="inline-block mt-4 text-blue-600 font-semibold text-sm">Leer comparativa →</span>
+              <span className="inline-block mt-4 text-blue-600 font-semibold text-sm">
+                Leer comparativa →
+              </span>
             </Link>
 
-            <Link href="/guia-afore" className="group p-6 bg-white border border-gray-200 rounded-2xl hover:border-blue-500 hover:shadow-md transition-all">
-              <span className="text-xs font-bold text-amber-600 uppercase tracking-widest">Retiro Seguro</span>
+            <Link
+              href="/guia-afore"
+              className="group p-6 bg-white border border-gray-200 rounded-2xl hover:border-blue-500 hover:shadow-md transition-all"
+            >
+              <span className="text-xs font-bold text-amber-600 uppercase tracking-widest">
+                Retiro Seguro
+              </span>
               <h3 className="text-xl font-bold text-gray-900 mt-2 group-hover:text-blue-600 transition-colors">
                 ¿Tu AFORE será suficiente?
               </h3>
               <p className="text-gray-600 mt-3 text-sm leading-relaxed text-pretty">
-                La mayoría de los mexicanos recibirá menos del 50% de su sueldo. Aprende cómo evitar este riesgo.
+                La mayoría de los mexicanos recibirá menos del 50% de su sueldo.
+                Aprende cómo evitar este riesgo.
               </p>
-              <span className="inline-block mt-4 text-blue-600 font-semibold text-sm">Ver realidad del retiro →</span>
+              <span className="inline-block mt-4 text-blue-600 font-semibold text-sm">
+                Ver realidad del retiro →
+              </span>
             </Link>
           </div>
-        </section>     
+        </section>
 
         <div className="no-print">
-            <Testimonials />
-            <SEOContent />
-            <FAQSection />
-            <Footer/>
+          <Testimonials />
+          <SEOContent />
+          <FAQSection />
+          <Footer />
         </div>
       </div>
     </main>
