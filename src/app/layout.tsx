@@ -57,6 +57,20 @@ export const metadata: Metadata = {
     locale: "es_MX",
     type: "website",
   },
+
+  // AQUÍ ESTÁ EL TRUCO:
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      // Si el robot entra por el dominio fantasma de vercel, le mete un "noindex" automático
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
 
 export default function RootLayout({
